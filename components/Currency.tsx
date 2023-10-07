@@ -28,7 +28,7 @@ const Currency = ({ currency }: Props) => {
       <div>1 PLN = {currency.PLNtoBYN.rate.rate} BYN</div>
       <hr />
       <div>Enter amount in BYN:</div>
-      <input type='number' inputMode="numeric" value={inputValue} onChange={handleInputChange} placeholder='Enter amount in BYN' />
+      <input type='number' inputMode="decimal" value={inputValue} onChange={handleInputChange} placeholder='Enter amount in BYN' />
       <div className='bold'>
         Среднее: {BYNtoRender} BYN = {averageSum} PLN
       </div>
