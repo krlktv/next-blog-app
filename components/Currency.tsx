@@ -15,7 +15,7 @@ const Currency = ({ currency }: Props) => {
   const averageSum = ((sumBYNtoPLN + sumPLNtoBYN) / 2).toFixed(4);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    setInputValue(e.target.value.replace(/,/g, '.'));
   };
 
   return (
