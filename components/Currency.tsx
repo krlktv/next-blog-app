@@ -8,10 +8,11 @@ type Props = {
 
 const Currency = ({ currency }: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
+  const BYNtoRender = inputValue || 0;
   const date = new Date(currency.BYNtoPLN.rate.timestamp).toLocaleString('en-GB');
   const sumBYNtoPLN = +inputValue * currency.BYNtoPLN.rate.rate;
   const sumPLNtoBYN = +inputValue / currency.PLNtoBYN.rate.rate;
-  const averageSum = (sumBYNtoPLN + sumPLNtoBYN) / 2;
+  const averageSum = ((sumBYNtoPLN + sumPLNtoBYN) / 2).toFixed(4);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -22,16 +23,16 @@ const Currency = ({ currency }: Props) => {
       <h3>Currency date from Revolut API: {date}</h3>
       <div>Currency BYN to PLN: 1 BYN = {currency.BYNtoPLN.rate.rate} PLN</div>
       <div>Currency PLN to BYN: 1 PLN = {currency.PLNtoBYN.rate.rate} BYN</div>
+      <div>Enter amount in BYN:</div>
+      <input type='number' value={inputValue} onChange={handleInputChange} placeholder='Enter amount in BYN' />
       <div className='bold'>
-        Среднее: <input type='number' value={inputValue} onChange={handleInputChange} placeholder='Enter amount in BYN' /> BYN ={' '}
-        {averageSum} PLN
-        {}
+        Среднее: {BYNtoRender} BYN = {averageSum} PLN
       </div>
       <div>
-        BYN to PLN: {inputValue} BYN = {sumBYNtoPLN} PLN
+        BYN to PLN: {BYNtoRender} BYN = {sumBYNtoPLN} PLN
       </div>
       <div>
-        BYN to PLN: {inputValue} BYN = {sumPLNtoBYN} PLN
+        BYN to PLN: {BYNtoRender} BYN = {sumPLNtoBYN} PLN
       </div>
     </>
   );
