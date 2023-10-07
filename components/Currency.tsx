@@ -21,10 +21,14 @@ const Currency = ({ currency }: Props) => {
   return (
     <>
       <h3>Currency date from Revolut API: {date}</h3>
-      <div>Currency BYN to PLN: 1 BYN = {currency.BYNtoPLN.rate.rate} PLN</div>
-      <div>Currency PLN to BYN: 1 PLN = {currency.PLNtoBYN.rate.rate} BYN</div>
+      <div>Currency BYN to PLN:</div>
+      <div>1 BYN = {currency.BYNtoPLN.rate.rate} PLN</div>
+      <hr />
+      <div>Currency PLN to BYN:</div>
+      <div>1 PLN = {currency.PLNtoBYN.rate.rate} BYN</div>
+      <hr />
       <div>Enter amount in BYN:</div>
-      <input type='number' value={inputValue} onChange={handleInputChange} placeholder='Enter amount in BYN' />
+      <input type='number' inputMode="numeric" value={inputValue} onChange={handleInputChange} placeholder='Enter amount in BYN' />
       <div className='bold'>
         Среднее: {BYNtoRender} BYN = {averageSum} PLN
       </div>
