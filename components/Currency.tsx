@@ -8,14 +8,14 @@ type Props = {
 
 const Currency = ({ currency }: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
-  const BYNtoRender = inputValue || 0;
+  const BYNvalue = Number(inputValue.replace(',', '.')) || 0;
   const date = new Date(currency.BYNtoPLN.rate.timestamp).toLocaleString('en-GB');
   const sumBYNtoPLN = +inputValue * currency.BYNtoPLN.rate.rate;
   const sumPLNtoBYN = +inputValue / currency.PLNtoBYN.rate.rate;
   const averageSum = ((sumBYNtoPLN + sumPLNtoBYN) / 2).toFixed(4);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value.replace(/,/g, '.'));
+    setInputValue(e.target.value);
   };
 
   return (
@@ -28,15 +28,21 @@ const Currency = ({ currency }: Props) => {
       <div>1 PLN = {currency.PLNtoBYN.rate.rate} BYN</div>
       <hr />
       <div>Enter amount in BYN:</div>
-      <input type='number' inputMode="decimal" value={inputValue} onChange={handleInputChange} placeholder='Enter amount in BYN' />
+      <input
+        type='number'
+        inputMode='decimal'
+        value={inputValue}
+        onChange={handleInputChange}
+        placeholder='Enter amount in BYN'
+      />
       <div className='bold'>
-        Среднее: {BYNtoRender} BYN = {averageSum} PLN
+        Среднее: {BYNvalue} BYN = {averageSum} PLN
       </div>
       <div>
-        BYN to PLN: {BYNtoRender} BYN = {sumBYNtoPLN} PLN
+        BYN to PLN: {BYNvalue} BYN = {sumBYNtoPLN} PLN
       </div>
       <div>
-        BYN to PLN: {BYNtoRender} BYN = {sumPLNtoBYN} PLN
+        BYN to PLN: {BYNvalue} BYN = {sumPLNtoBYN} PLN
       </div>
     </>
   );
