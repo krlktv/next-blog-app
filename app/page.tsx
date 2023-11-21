@@ -7,9 +7,7 @@ async function getCurrency(from: string, to: string) {
       headers: {
         'accept-language': 'en',
       },
-      next: {
-        revalidate: 60,
-      },
+      cache: 'no-cache',
     }
   );
   return response.json();
