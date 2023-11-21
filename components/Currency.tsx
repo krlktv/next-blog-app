@@ -36,7 +36,7 @@ const Currency = ({ currency }: Props) => {
         placeholder='Enter amount in BYN'
       />
       <div className='bold'>
-        Среднее: {BYNvalue} BYN = {averageSum} PLN
+        Average: {BYNvalue} BYN = {averageSum} PLN
       </div>
       <div>
         BYN to PLN: {BYNvalue} BYN = {sumBYNtoPLN} PLN
