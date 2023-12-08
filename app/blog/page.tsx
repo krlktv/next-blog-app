@@ -2,13 +2,13 @@
 import { PostSearch } from '@/components/PostSearch';
 import { Posts } from '@/components/posts';
 import { getAllPosts } from '@/services/getPosts';
-import { Metadata } from 'next';
+// import { Metadata } from 'next';
 import { useEffect, useState } from 'react';
 import Loading from './loading';
 
-export const metadata: Metadata = {
-  title: 'Blog | Next Blog App',
-};
+// export const metadata: Metadata = {
+//   title: 'Blog | Next Blog App',
+// };
 
 export default function Blog() {
   const [posts, setPosts] = useState<any[]>([]);
