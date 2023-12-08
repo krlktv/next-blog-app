@@ -42,7 +42,7 @@ const Currency = ({ currency }: Props) => {
         BYN to PLN: {BYNvalue} BYN = {sumBYNtoPLN} PLN
       </div>
       <div>
-        BYN to PLN: {BYNvalue} BYN = {sumPLNtoBYN} PLN
+        PLN to BYN: {BYNvalue} BYN = {sumPLNtoBYN} PLN
       </div>
     </>
   );
