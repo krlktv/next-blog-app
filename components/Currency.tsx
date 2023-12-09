@@ -8,14 +8,26 @@ type Props = {
 
 const Currency = ({ currency }: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
-  const BYNvalue = Number(inputValue.replace(',', '.')) || 0;
+  const inputSum = Number(inputValue);
+  const BYNvalue = isNaN(inputSum) ? 0 : inputSum;
   const date = new Date(currency.BYNtoPLN.rate.timestamp).toLocaleString('en-GB');
-  const sumBYNtoPLN = +inputValue * currency.BYNtoPLN.rate.rate;
-  const sumPLNtoBYN = +inputValue / currency.PLNtoBYN.rate.rate;
+  const sumBYNtoPLN = BYNvalue * currency.BYNtoPLN.rate.rate;
+  const sumPLNtoBYN = BYNvalue / currency.PLNtoBYN.rate.rate;
   const averageSum = ((sumBYNtoPLN + sumPLNtoBYN) / 2).toFixed(4);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    let inputValue = e.target.value
+      .replace(/[^0-9.,]/g, '')
+      .replace(',', '.')
+      .replace(/(\.[^.]*)\./g, '$1');
+
+    const decimalIndex = inputValue.indexOf('.');
+    if (decimalIndex !== -1) {
+      const decimalPart = inputValue.substring(decimalIndex + 1, decimalIndex + 3);
+      inputValue = inputValue.substring(0, decimalIndex + 1) + decimalPart;
+    }
+
+    setInputValue(inputValue);
   };
 
   return (
@@ -28,21 +40,19 @@ const Currency = ({ currency }: Props) => {
       <div>1 PLN = {currency.PLNtoBYN.rate.rate} BYN</div>
       <hr />
       <div>Enter amount in BYN:</div>
-      <input
-        type='number'
-        inputMode='decimal'
-        value={inputValue}
-        onChange={handleInputChange}
-        placeholder='Enter amount in BYN'
-      />
+      <input inputMode='decimal' value={inputValue} onChange={handleInputChange} placeholder='Enter amount in BYN' />
+      <div>Average:</div>
       <div className='bold'>
-        Average: {BYNvalue} BYN = {averageSum} PLN
+        {BYNvalue} BYN = {averageSum} PLN
       </div>
+      <div>BYN to PLN:</div>
       <div>
-        BYN to PLN: {BYNvalue} BYN = {sumBYNtoPLN} PLN
+        {BYNvalue} BYN = {sumBYNtoPLN} PLN
       </div>
+      <br />
+      <div>PLN to BYN:</div>
       <div>
-        PLN to BYN: {BYNvalue} BYN = {sumPLNtoBYN} PLN
+        {BYNvalue} BYN = {sumPLNtoBYN} PLN
       </div>
     </>
   );
