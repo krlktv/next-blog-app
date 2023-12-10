@@ -1,13 +1,10 @@
 'use client';
-
 import { getPostsBySearch } from '@/services/getPosts';
 import { FormEventHandler, useState } from 'react';
+import useSWR from 'swr';
 
-type Props = {
-  onSearch: (value: any[]) => void;
-};
-
-const PostSearch = ({ onSearch }: Props) => {
+const PostSearch = () => {
+  const { mutate } = useSWR('posts');
   const [search, setSearch] = useState<string>('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,9 +13,10 @@ const PostSearch = ({ onSearch }: Props) => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
+
     try {
       const posts = await getPostsBySearch(search);
-      onSearch(posts);
+      mutate(posts);
     } catch (error) {
       console.error('Error fetching posts');
     }
