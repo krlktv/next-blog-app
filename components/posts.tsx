@@ -1,4 +1,5 @@
 'use client';
+
 import Loading from '@/app/blog/loading';
 import { getAllPosts } from '@/services/getPosts';
 import Link from 'next/link';
