@@ -1,25 +1,41 @@
 'use client';
 
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 
 type Props = {
   currency: any;
 };
 
-const Currency = ({ currency }: Props) => {
-  const [inputValue, setInputValue] = useState<string>('');
-  const inputSum = Number(inputValue);
-  const BYNvalue = isNaN(inputSum) ? 0 : inputSum;
-  const date = new Date(currency.BYNtoPLN.rate.timestamp).toLocaleString('en-GB');
-  const sumBYNtoPLN = BYNvalue * currency.BYNtoPLN.rate.rate;
-  const sumPLNtoBYN = BYNvalue / currency.PLNtoBYN.rate.rate;
-  const averageSum = ((sumBYNtoPLN + sumPLNtoBYN) / 2).toFixed(4);
+type CurrencyState = {
+  inputBYNValue: string;
+  inputPLNValue: string;
+};
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    let inputValue = e.target.value
+const Currency: FC<Props> = ({ currency }) => {
+  const [currencyState, setCurrencyState] = useState<CurrencyState>({
+    inputBYNValue: '',
+    inputPLNValue: '',
+  });
+  const date = new Date(currency.BYNtoPLN.rate.timestamp).toLocaleString('en-GB');
+
+  const formatInputValue = (inputValue: string) => {
+    return inputValue
       .replace(/[^0-9.,]/g, '')
       .replace(',', '.')
       .replace(/(\.[^.]*)\./g, '$1');
+  };
+
+  const calculateSum = (value: number, rate: number) => {
+    return (value * rate).toFixed(2);
+  };
+
+  const BYNvalue = isNaN(Number(currencyState.inputBYNValue)) ? 0 : Number(currencyState.inputBYNValue).toFixed(2);
+  const sumBYNtoPLN = calculateSum(+BYNvalue, currency.BYNtoPLN.rate.rate);
+  const sumPLNtoBYN = calculateSum(+BYNvalue, 1 / currency.PLNtoBYN.rate.rate);
+  const averageSum = ((Number(sumBYNtoPLN) + Number(sumPLNtoBYN)) / 2).toFixed(2);
+
+  const handleInputChange = (currencyType: 'inputBYNValue' | 'inputPLNValue') => (e: ChangeEvent<HTMLInputElement>) => {
+    let inputValue = formatInputValue(e.target.value);
 
     const decimalIndex = inputValue.indexOf('.');
     if (decimalIndex !== -1) {
@@ -27,7 +43,10 @@ const Currency = ({ currency }: Props) => {
       inputValue = inputValue.substring(0, decimalIndex + 1) + decimalPart;
     }
 
-    setInputValue(inputValue);
+    setCurrencyState((prevState) => ({
+      ...prevState,
+      [currencyType]: inputValue,
+    }));
   };
 
   return (
@@ -39,8 +58,19 @@ const Currency = ({ currency }: Props) => {
       <div>Currency PLN to BYN:</div>
       <div>1 PLN = {currency.PLNtoBYN.rate.rate} BYN</div>
       <hr />
-      <div>Enter amount in BYN:</div>
-      <input inputMode='decimal' value={inputValue} onChange={handleInputChange} placeholder='Enter amount in BYN' />
+      <input
+        inputMode='decimal'
+        value={currencyState.inputBYNValue}
+        onChange={handleInputChange('inputBYNValue')}
+        placeholder='BYN'
+      />
+      <input
+        inputMode='decimal'
+        value={currencyState.inputPLNValue}
+        onChange={handleInputChange('inputPLNValue')}
+        placeholder='PLN (Temporarily disabled)'
+        disabled
+      />
       <div>Average:</div>
       <div className='bold'>
         {BYNvalue} BYN = {averageSum} PLN
